@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Gerenciador de encomendas</string>
+    <string name="form_titulo">Adicionar pacote:</string>
 </resources>

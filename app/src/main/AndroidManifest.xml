@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.gerenciadordeencomendas">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,7 +16,16 @@
         android:theme="@style/Theme.GerenciadorDeEncomendas"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.FormEncomendaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ListaEncomendasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.CadastroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
