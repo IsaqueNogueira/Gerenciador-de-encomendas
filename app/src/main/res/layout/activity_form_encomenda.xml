@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     >
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.FormEncomendaActivity">
@@ -31,8 +31,8 @@
         android:text="@string/form_titulo"
         android:textSize="25sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/activity_form_encomenda_codigo_layout"
-        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.24"
         android:textColor="@color/purple_500"
         />
     <com.google.android.material.textfield.TextInputLayout
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.38"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -91,6 +91,19 @@
             android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/activity_form_encomenda_mensagemErro"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        tools:text="*Erro ao cadastrar encomenda!"
+        app:layout_constraintTop_toBottomOf="@id/activity_form_encomenda_nomedopacote_layout"
+        app:layout_constraintStart_toStartOf="@id/activity_form_encomenda_nomedopacote_layout"
+        app:layout_constraintEnd_toEndOf="@id/activity_form_encomenda_nomedopacote_layout"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="12sp"
+        />
 
     <View
         android:id="@+id/activity_form_linha1"

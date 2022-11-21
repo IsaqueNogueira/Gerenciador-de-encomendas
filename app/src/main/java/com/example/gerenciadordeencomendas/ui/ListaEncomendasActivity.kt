@@ -21,6 +21,7 @@ class ListaEncomendasActivity : AppCompatActivity() {
         setContentView(binding.root)
         title = "Minha encomendas"
         clicouBotaoAdicionarPacote()
+        repository.auth.signOut()
     }
 
     private fun clicouBotaoAdicionarPacote() {

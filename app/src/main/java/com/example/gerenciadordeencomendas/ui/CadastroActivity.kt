@@ -39,8 +39,12 @@ class CadastroActivity : AppCompatActivity() {
                 val usuario = Usuario(nome, email, senha)
                 repository.cadastraUsuario(usuario).addOnSuccessListener {
                     Intent(this, ListaEncomendasActivity::class.java).apply {
-                        startActivity(this)
-                        finish()
+                        repository.salvarNomeDoUsuario(usuario.nome).addOnCompleteListener {
+                            if (it.isSuccessful){
+                                startActivity(this)
+                                finish()
+                            }
+                        }
                     }
                 }.addOnFailureListener {exception->
                     ocultaProgressBar()
