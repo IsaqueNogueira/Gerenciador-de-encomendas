@@ -24,42 +24,48 @@ class FormEncomendaActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
         clicoubotaoVoltar()
+        clicouBotaoAdicionarEncomenda()
+    }
 
-       binding.activityFormEncomendaBotao.setOnClickListener {
-           val codigoRastreio = binding.activityFormEncomendaCodigo.text.toString()
-           val nomePacote = binding.activityFormEncomendaNomedopacote.text.toString()
-           val dataAtualizado = Utils().dataHora()
-           val dataCriado = Utils().dataHoraMillisegundos()
-           if (!TextUtils.isEmpty(codigoRastreio) && !TextUtils.isEmpty(nomePacote)){
-               val encomenda = Encomenda(codigoRastreio,nomePacote, dataAtualizado, dataCriado)
-               if (validaRastreio(codigoRastreio)){
-                   repository.salvarEncomenda(encomenda).addOnCompleteListener {
-                       if (it.isSuccessful){
-                           finish()
-                       }else{
-                           binding.activityFormEncomendaMensagemErro.text = "*Erro ao adicionar encomenda!"
-                           Handler().postDelayed({
-                               binding.activityFormEncomendaMensagemErro.text = ""
-                           },4000)
-                       }
-                   }
-               }else{
-                   binding.activityFormEncomendaCodigo.setError("Código inválido")
-                   binding.activityFormEncomendaCodigo.requestFocus()
-               }
-           }
-           when{
-               codigoRastreio.isEmpty() ->{
-                  binding.activityFormEncomendaCodigo.setError("Campo obrigatório")
-                   binding.activityFormEncomendaCodigo.requestFocus()
-               }
-               nomePacote.isEmpty()->{
-               binding.activityFormEncomendaNomedopacote.setError("Campo obrigatório!")
-               binding.activityFormEncomendaNomedopacote.requestFocus()
-               }
-           }
+    private fun clicouBotaoAdicionarEncomenda() {
+        binding.activityFormEncomendaBotao.setOnClickListener {
+            val usuarioId = repository.auth.currentUser?.uid
+            val codigoRastreio = binding.activityFormEncomendaCodigo.text.toString()
+            val nomePacote = binding.activityFormEncomendaNomedopacote.text.toString()
+            val dataAtualizado = Utils().dataHora()
+            val dataCriado = Utils().dataHoraMillisegundos()
+            val status = "Toque para atualizar"
+            if (!TextUtils.isEmpty(codigoRastreio) && !TextUtils.isEmpty(nomePacote)) {
+                val encomenda = Encomenda(usuarioId.toString(), codigoRastreio, nomePacote, status, dataCriado, dataAtualizado)
+                if (validaRastreio(codigoRastreio)) {
+                    repository.salvarEncomenda(encomenda).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            finish()
+                        } else {
+                            binding.activityFormEncomendaMensagemErro.text =
+                                "*Erro ao adicionar encomenda!"
+                            Handler().postDelayed({
+                                binding.activityFormEncomendaMensagemErro.text = ""
+                            }, 4000)
+                        }
+                    }
+                } else {
+                    binding.activityFormEncomendaCodigo.setError("Código inválido")
+                    binding.activityFormEncomendaCodigo.requestFocus()
+                }
+            }
+            when {
+                codigoRastreio.isEmpty() -> {
+                    binding.activityFormEncomendaCodigo.setError("Campo obrigatório")
+                    binding.activityFormEncomendaCodigo.requestFocus()
+                }
+                nomePacote.isEmpty() -> {
+                    binding.activityFormEncomendaNomedopacote.setError("Campo obrigatório!")
+                    binding.activityFormEncomendaNomedopacote.requestFocus()
+                }
+            }
 
-       }
+        }
     }
 
     private fun clicoubotaoVoltar() {
