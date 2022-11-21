@@ -25,7 +25,10 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
         vaiParaCadastro()
         verificaUsuarioLogado()
+        clicouBotaoLogin()
+    }
 
+    private fun clicouBotaoLogin() {
         binding.activityLoginBotaoLogin.setOnClickListener {
             val email = binding.activityLoginEmail.text.toString()
             val senha = binding.activityLoginSenha.text.toString()
@@ -36,20 +39,20 @@ class LoginActivity : AppCompatActivity() {
                         if (it.isSuccessful) {
                             vaiParaListaEncomendas()
                             finish()
-                        }else{
+                        } else {
                             ocultaProgressBar()
                         }
-                    }.addOnFailureListener { exception->
+                    }.addOnFailureListener { exception ->
                         ocultaProgressBar()
-                        val mensagemErro = when(exception){
+                        val mensagemErro = when (exception) {
                             is FirebaseAuthInvalidCredentialsException -> "*Email ou senha incorretos!"
                             is FirebaseNetworkException -> "*Sem conexão com a internet!"
                             else -> "*Ocorreu um erro ao fazer login, verifique a senha!"
                         }
                         binding.activityLoginMensagemErro.text = mensagemErro
                         Handler().postDelayed({
-                         binding.activityLoginMensagemErro.text = ""
-                        },4000)
+                            binding.activityLoginMensagemErro.text = ""
+                        }, 4000)
 
                     }
             }
