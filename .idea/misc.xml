@@ -5,14 +5,19 @@
       <map>
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/botao.xml" value="0.172" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/ic_back.xml" value="0.172" />
+        <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/ic_calendar.xml" value="0.1955" />
+        <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/ic_gps.xml" value="0.1955" />
+        <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/ic_package.xml" value="0.1955" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/ic_resource_package.xml" value="0.1955" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/drawable/view_circular.xml" value="0.172" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/activity_cadastro.xml" value="0.33" />
+        <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/activity_detalhe_encomenda.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/activity_form_encomenda.xml" value="0.25" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/activity_lista_encomendas.xml" value="0.33" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/item_encomenda.xml" value="0.33" />
+        <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/layout/item_rastreio.xml" value="0.5" />
         <entry key="..\:/Users/Isaque/AndroidStudioProjects/Gerenciadordeencomendas/app/src/main/res/menu/menu_lista_encomendas.xml" value="0.36666666666666664" />
       </map>
     </option>

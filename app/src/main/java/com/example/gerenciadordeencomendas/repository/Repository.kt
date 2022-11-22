@@ -62,8 +62,8 @@ class Repository {
                         val status = document.getString("status").toString()
                         val dataCriado = document.getLong("dataCriado")!!
                         val dataAtualizado = document.getString("dataAtualizado").toString()
-
-                         encomendas.add(Encomenda(usuarioId,codigoRastreio,nomePacote,status,dataCriado,dataAtualizado))
+                        val firebaseId = document.id
+                         encomendas.add(Encomenda(firebaseId, usuarioId,codigoRastreio,nomePacote,status,dataCriado,dataAtualizado))
 
                         liveDataEncomenda.value = encomendas
                     }
@@ -72,5 +72,26 @@ class Repository {
     }
 
     val liveDataEncomenda = MutableLiveData<List<Encomenda>>()
+
+    fun buscaEncomendaPorId(encomendaId: String){
+        db.collection("Encomendas")
+            .document(encomendaId)
+            .addSnapshotListener { documento, error ->
+                if (documento != null){
+                   val usuarioId =  documento.getString("usuarioId").toString()
+                   val codigoRastreio =  documento.getString("codigoRastreio").toString()
+                   val nomePacote =  documento.getString("nomePacote").toString()
+                   val status =  documento.getString("status").toString()
+                   val dataCriado =  documento.getLong("dataCriado")!!
+                   val dataAtualizado =  documento.getString("dataAtualizado").toString()
+                   val firebaseId =  documento.id
+                   val  encomendas = Encomenda(firebaseId, usuarioId,codigoRastreio,nomePacote,status,dataCriado,dataAtualizado)
+                    liveDataEncomendaId.value = encomendas
+
+                }
+            }
+    }
+
+    val liveDataEncomendaId = MutableLiveData<Encomenda>()
 
 }
