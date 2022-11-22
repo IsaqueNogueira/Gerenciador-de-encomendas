@@ -1,4 +1,4 @@
-package com.example.gerenciadordeencomendas.ui
+package com.example.gerenciadordeencomendas.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,8 +10,6 @@ import com.example.gerenciadordeencomendas.databinding.ActivityLoginBinding
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
 class LoginActivity : AppCompatActivity() {
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.DetalheEncomendaActivity">
+
+    <View
+        android:id="@+id/activity_detalhe_encomenda_circulo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/view_circular"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <View
+        android:id="@+id/activity_detalhe_encomenda_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_package"
+        app:layout_constraintBottom_toBottomOf="@id/activity_detalhe_encomenda_circulo"
+        app:layout_constraintEnd_toEndOf="@id/activity_detalhe_encomenda_circulo"
+        app:layout_constraintStart_toStartOf="@id/activity_detalhe_encomenda_circulo"
+        app:layout_constraintTop_toTopOf="@id/activity_detalhe_encomenda_circulo" />
+
+    <TextView
+        android:id="@+id/activity_detalhe_encomenda_nomePacote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_circulo"
+        tools:text="Flamengo, corinthians, vasco, fluminense, brasil, flamengo, brasil, flamengo, corinthia,sao paulo, fluminense, cruzeiro, flamengo, brasil, simone,vanessa" />
+
+    <TextView
+        android:id="@+id/activity_detalhe_encomenda_codigoRastreio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_nomePacote"
+        app:layout_constraintStart_toStartOf="@id/activity_detalhe_encomenda_nomePacote"
+        app:layout_constraintEnd_toEndOf="@id/activity_detalhe_encomenda_nomePacote"
+        tools:text="AB123456789BR"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        />
+
+    <View
+        android:id="@+id/activity_detalhe_encomenda_linha"
+        android:layout_width="0dp"
+        android:layout_height="0.6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_codigoRastreio"
+        android:background="@color/cinza_fraco"
+        android:layout_margin="16dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activity_detalhe_encomenda_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_linha"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/item_rastreio"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

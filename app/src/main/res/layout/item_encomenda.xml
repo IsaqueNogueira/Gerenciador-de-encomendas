@@ -18,24 +18,15 @@
 
         <View
             android:id="@+id/item_encomenda_circulo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/view_circular"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_resource_package"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="5dp"
             app:layout_constraintHorizontal_bias="0.02"
-            />
-        <View
-            android:id="@+id/item_encomenda_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintTop_toTopOf="@id/item_encomenda_circulo"
-            app:layout_constraintBottom_toBottomOf="@id/item_encomenda_circulo"
-            app:layout_constraintStart_toStartOf="@id/item_encomenda_circulo"
-            app:layout_constraintEnd_toEndOf="@id/item_encomenda_circulo"
-            android:background="@drawable/ic_resource_package"
             />
 
         <TextView
@@ -45,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_encomenda_circulo"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginTop="12dp"
@@ -62,6 +53,7 @@
             app:layout_constraintTop_toBottomOf="@id/item_encomenda_nomePacote"
             app:layout_constraintStart_toEndOf="@id/item_encomenda_circulo"
             app:layout_constraintStart_toStartOf="@id/item_encomenda_nomePacote"
+            android:textSize="12sp"
             />
         <TextView
             android:id="@+id/item_encomenda_data"
@@ -73,11 +65,12 @@
             app:layout_constraintStart_toStartOf="@id/item_encomenda_status"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="12dp"
+            android:textSize="12sp"
             />
 
         <View
             android:layout_width="0dp"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:background="@color/purple_500"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

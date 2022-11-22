@@ -1,10 +1,9 @@
-package com.example.gerenciadordeencomendas.ui
+package com.example.gerenciadordeencomendas.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
-import android.util.Log
 import com.example.gerenciadordeencomendas.databinding.ActivityFormEncomendaBinding
 import com.example.gerenciadordeencomendas.model.Encomenda
 import com.example.gerenciadordeencomendas.repository.Repository
@@ -35,8 +34,9 @@ class FormEncomendaActivity : AppCompatActivity() {
             val dataAtualizado = Utils().dataHora()
             val dataCriado = Utils().dataHoraMillisegundos()
             val status = "Toque para atualizar"
+            val firebaseId = ""
             if (!TextUtils.isEmpty(codigoRastreio) && !TextUtils.isEmpty(nomePacote)) {
-                val encomenda = Encomenda(usuarioId.toString(), codigoRastreio, nomePacote, status, dataCriado, dataAtualizado)
+                val encomenda = Encomenda(firebaseId, usuarioId.toString(), codigoRastreio, nomePacote, status, dataCriado, dataAtualizado)
                 if (validaRastreio(codigoRastreio)) {
                     repository.salvarEncomenda(encomenda).addOnCompleteListener {
                         if (it.isSuccessful) {
