@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.gerenciadordeencomendas.model.Encomenda
 import com.example.gerenciadordeencomendas.model.Usuario
+import com.example.gerenciadordeencomendas.utils.Utils
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -93,5 +94,14 @@ class Repository {
     }
 
     val liveDataEncomendaId = MutableLiveData<Encomenda>()
+
+    fun atualizaStatus(encomendaId: String, status: String){
+        val data = Utils().dataHora()
+        db.collection("Encomendas").document(encomendaId)
+            .update("dataAtualizado", data, "status", status)
+            .addOnCompleteListener {
+
+            }
+    }
 
 }

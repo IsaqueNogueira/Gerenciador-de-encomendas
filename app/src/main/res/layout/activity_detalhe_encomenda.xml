@@ -44,37 +44,48 @@
         android:id="@+id/activity_detalhe_encomenda_codigoRastreio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_nomePacote"
-        app:layout_constraintStart_toStartOf="@id/activity_detalhe_encomenda_nomePacote"
-        app:layout_constraintEnd_toEndOf="@id/activity_detalhe_encomenda_nomePacote"
-        tools:text="AB123456789BR"
-        android:textSize="12sp"
         android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/activity_detalhe_encomenda_nomePacote"
+        app:layout_constraintStart_toStartOf="@id/activity_detalhe_encomenda_nomePacote"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_nomePacote"
+        tools:text="AB123456789BR" />
+
+    <TextView
+        android:id="@+id/activity_detalhe_encomenda_dias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_codigoRastreio"
+        app:layout_constraintStart_toStartOf="@id/activity_detalhe_encomenda_codigoRastreio"
+        app:layout_constraintEnd_toEndOf="@id/activity_detalhe_encomenda_codigoRastreio"
+        tools:text="25 dias"
+        android:textSize="12sp"
         />
 
     <View
         android:id="@+id/activity_detalhe_encomenda_linha"
         android:layout_width="0dp"
-        android:layout_height="0.6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_codigoRastreio"
-        android:background="@color/cinza_fraco"
+        android:layout_height="0.4dp"
         android:layout_margin="16dp"
-        />
+        android:background="@color/cinza_fraco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_dias" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_detalhe_encomenda_recyclerview"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_linha"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_linha"
         tools:listitem="@layout/item_rastreio"
+
         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
