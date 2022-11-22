@@ -1,4 +1,4 @@
-package com.example.gerenciadordeencomendas.ui
+package com.example.gerenciadordeencomendas.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +11,6 @@ import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.ListaEncomendasAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityListaEncomendasBinding
 import com.example.gerenciadordeencomendas.repository.Repository
-import com.google.firebase.auth.FirebaseAuth
 
 class ListaEncomendasActivity : AppCompatActivity() {
 
@@ -59,6 +58,14 @@ class ListaEncomendasActivity : AppCompatActivity() {
             adapter.atualiza(encomenda)
             val recyclerView = binding.activityListaEncomendaRecyclerview
             recyclerView.adapter = adapter
+            adapter.quandoClicarNoItem = {
+                val intent = Intent(
+                    this, DetalheEncomendaActivity::class.java
+                ).apply {
+                    putExtra(CHAVE_ENCOMENDA_ID, it.firebaseId)
+                }
+                startActivity(intent)
+            }
         })
     }
 
