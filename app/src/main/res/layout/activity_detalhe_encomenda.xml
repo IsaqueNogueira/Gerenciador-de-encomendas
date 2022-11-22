@@ -51,17 +51,6 @@
         app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_nomePacote"
         tools:text="AB123456789BR" />
 
-    <TextView
-        android:id="@+id/activity_detalhe_encomenda_dias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_codigoRastreio"
-        app:layout_constraintStart_toStartOf="@id/activity_detalhe_encomenda_codigoRastreio"
-        app:layout_constraintEnd_toEndOf="@id/activity_detalhe_encomenda_codigoRastreio"
-        tools:text="25 dias"
-        android:textSize="12sp"
-        />
-
     <View
         android:id="@+id/activity_detalhe_encomenda_linha"
         android:layout_width="0dp"
@@ -70,7 +59,7 @@
         android:background="@color/cinza_fraco"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_dias" />
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_codigoRastreio" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_detalhe_encomenda_recyclerview"
@@ -85,7 +74,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_linha"
         tools:listitem="@layout/item_rastreio"
-
+        />
+    <TextView
+        android:id="@+id/activity_detalhe_encomenda_mensagemErro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/erroRastreio"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_iconErro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        />
+    <View
+        android:id="@+id/activity_detalhe_encomenda_iconErro"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/ic_error"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_linha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        />
+    <ProgressBar
+        android:id="@+id/activity_detalhe_encomenda_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_detalhe_encomenda_linha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:visibility="gone"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

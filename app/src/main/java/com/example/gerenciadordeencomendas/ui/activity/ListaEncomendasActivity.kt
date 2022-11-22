@@ -1,16 +1,19 @@
 package com.example.gerenciadordeencomendas.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.ListaEncomendasAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityListaEncomendasBinding
 import com.example.gerenciadordeencomendas.repository.Repository
+import com.google.android.material.snackbar.Snackbar
 
 class ListaEncomendasActivity : AppCompatActivity() {
 
@@ -66,6 +69,20 @@ class ListaEncomendasActivity : AppCompatActivity() {
                 }
                 startActivity(intent)
             }
+
+            adapter.quandoSegurarNoItem = {
+                AlertDialog.Builder(this)
+                    .setTitle("Excluir encomenda?")
+                    .setPositiveButton("Sim"){_,_->
+                        repository.excluirEncomenda(it.firebaseId).addOnCompleteListener {
+                            Toast.makeText(this, "Encomenda excluída", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                    .setNegativeButton("Não"){_,_-> }
+                    .show()
+            }
+
         })
     }
 

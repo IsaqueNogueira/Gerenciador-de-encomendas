@@ -1,14 +1,13 @@
 package com.example.gerenciadordeencomendas.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gerenciadordeencomendas.databinding.ItemRastreioBinding
 import com.example.gerenciadordeencomendas.repository.Repository
 import com.example.gerenciadordeencomendas.webcliente.model.Evento
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 class DetalheEncomendaAdapter(
     private val context: Context,

@@ -104,4 +104,11 @@ class Repository {
             }
     }
 
+    fun excluirEncomenda(firebaseId : String): Task<Void> {
+      return  db.collection("Encomendas").document(firebaseId)
+            .delete().addOnCompleteListener {
+
+            }
+    }
+
 }
