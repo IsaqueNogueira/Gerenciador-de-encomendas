@@ -1,19 +1,20 @@
 package com.example.gerenciadordeencomendas.ui.activity
 
 import android.content.Intent
-import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.ListaEncomendasAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityListaEncomendasBinding
 import com.example.gerenciadordeencomendas.repository.Repository
-import com.google.android.material.snackbar.Snackbar
+import com.example.gerenciadordeencomendas.utils.NetworkChecker
 
 class ListaEncomendasActivity : AppCompatActivity() {
 
@@ -25,6 +26,7 @@ class ListaEncomendasActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityListaEncomendasBinding.inflate(layoutInflater)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,38 +54,39 @@ class ListaEncomendasActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        configuraRecyclerview()
+            configuraRecyclerview()
     }
 
     private fun configuraRecyclerview() {
-        repository.buscaTodasEncomendas()
-        repository.liveDataEncomenda.observe(this, Observer { encomenda ->
-            adapter.atualiza(encomenda)
-            val recyclerView = binding.activityListaEncomendaRecyclerview
-            recyclerView.adapter = adapter
-            adapter.quandoClicarNoItem = {
-                val intent = Intent(
-                    this, DetalheEncomendaActivity::class.java
-                ).apply {
-                    putExtra(CHAVE_ENCOMENDA_ID, it.firebaseId)
-                }
-                startActivity(intent)
-            }
-
-            adapter.quandoSegurarNoItem = {
-                AlertDialog.Builder(this)
-                    .setTitle("Excluir encomenda?")
-                    .setPositiveButton("Sim"){_,_->
-                        repository.excluirEncomenda(it.firebaseId).addOnCompleteListener {
-                            Toast.makeText(this, "Encomenda excluída", Toast.LENGTH_SHORT).show()
-
-                        }
+            repository.buscaTodasEncomendas()
+            repository.liveDataEncomenda.observe(this, Observer { encomenda ->
+                adapter.atualiza(encomenda)
+                val recyclerView = binding.activityListaEncomendaRecyclerview
+                recyclerView.adapter = adapter
+                adapter.quandoClicarNoItem = {
+                    val intent = Intent(
+                        this, DetalheEncomendaActivity::class.java
+                    ).apply {
+                        putExtra(CHAVE_ENCOMENDA_ID, it.firebaseId)
                     }
-                    .setNegativeButton("Não"){_,_-> }
-                    .show()
-            }
+                    startActivity(intent)
+                }
 
-        })
+                adapter.quandoSegurarNoItem = {
+                    AlertDialog.Builder(this)
+                        .setTitle("Excluir encomenda?")
+                        .setPositiveButton("Sim") { _, _ ->
+                            repository.excluirEncomenda(it.firebaseId).addOnCompleteListener {
+                                Toast.makeText(this, "Encomenda excluída", Toast.LENGTH_SHORT)
+                                    .show()
+
+                            }
+                        }
+                        .setNegativeButton("Não") { _, _ -> }
+                        .show()
+                }
+
+            })
     }
 
     private fun clicouBotaoAdicionarPacote() {

@@ -98,7 +98,7 @@ class Repository {
     fun atualizaStatus(encomendaId: String, status: String){
         val data = Utils().dataHora()
         db.collection("Encomendas").document(encomendaId)
-            .update("dataAtualizado", data, "status", status)
+            .update("dataAtualizado", "Atualizado em: $data", "status", status)
             .addOnCompleteListener {
 
             }

@@ -1,6 +1,7 @@
 package com.example.gerenciadordeencomendas.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -35,6 +36,13 @@ class DetalheEncomendaAdapter(
 
             val status = binding.itemRastreioStatus
             status.text = evento.status
+
+            if (evento.subStatus == ultimoStatus.subStatus &&
+                evento.hora == ultimoStatus.hora &&
+                    evento.data == ultimoStatus.data){
+                status.setTextColor(Color.parseColor("#02a2de"))
+                binding.itemRastreioMarca.setBackgroundColor(Color.parseColor("#02a2de"))
+            }
 
             val subStatus = binding.itemRastreioSubstatus
             if(evento.status != "Objeto recebido pelos Correios do Brasil") {
