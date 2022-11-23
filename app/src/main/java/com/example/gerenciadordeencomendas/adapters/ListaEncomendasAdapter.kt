@@ -1,11 +1,13 @@
 package com.example.gerenciadordeencomendas.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.databinding.ItemEncomendaBinding
 import com.example.gerenciadordeencomendas.model.Encomenda
 
@@ -46,6 +48,11 @@ class ListaEncomendasAdapter(
 
            val status = binding.itemEncomendaStatus
            status.text = encomenda.status
+
+           if(encomenda.status == "Entregue"){
+               binding.itemEncomendaIcon.setBackgroundResource(R.drawable.ic_packageentregueverde)
+               binding.itemEncomendaLinha.setBackgroundColor(Color.parseColor("#54B435"))
+           }
 
            val dataAtualizado = binding.itemEncomendaData
            dataAtualizado.text = encomenda.dataAtualizado.toString()

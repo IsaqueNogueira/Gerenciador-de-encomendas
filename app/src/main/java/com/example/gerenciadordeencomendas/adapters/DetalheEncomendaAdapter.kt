@@ -39,9 +39,13 @@ class DetalheEncomendaAdapter(
 
             if (evento.subStatus == ultimoStatus.subStatus &&
                 evento.hora == ultimoStatus.hora &&
-                    evento.data == ultimoStatus.data){
+                    evento.data == ultimoStatus.data && evento.status != "Objeto entregue ao destinatário"){
                 status.setTextColor(Color.parseColor("#02a2de"))
                 binding.itemRastreioMarca.setBackgroundColor(Color.parseColor("#02a2de"))
+            }else if(evento.status == "Objeto entregue ao destinatário"){
+                status.text = "Entregue"
+                status.setTextColor(Color.parseColor("#54B435"))
+                binding.itemRastreioMarca.setBackgroundColor(Color.parseColor("#54B435"))
             }
 
             val subStatus = binding.itemRastreioSubstatus
@@ -64,7 +68,11 @@ class DetalheEncomendaAdapter(
             val hora = binding.itemRastreioHora
             hora.text = evento.hora
 
-            repository.atualizaStatus(encomendaId, ultimoStatus.status)
+            if (ultimoStatus.status == "Objeto entregue ao destinatário") {
+                repository.atualizaStatus(encomendaId, "Entregue")
+            }else{
+                repository.atualizaStatus(encomendaId, ultimoStatus.status)
+            }
 
         }
 

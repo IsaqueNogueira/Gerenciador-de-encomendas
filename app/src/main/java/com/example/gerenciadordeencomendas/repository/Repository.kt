@@ -2,6 +2,7 @@ package com.example.gerenciadordeencomendas.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.example.gerenciadordeencomendas.databinding.ItemEncomendaBinding
 import com.example.gerenciadordeencomendas.model.Encomenda
 import com.example.gerenciadordeencomendas.model.Usuario
 import com.example.gerenciadordeencomendas.utils.Utils
@@ -12,7 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
 class Repository {
-
 
     val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()

@@ -3,6 +3,7 @@ package com.example.gerenciadordeencomendas.ui.activity
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,8 +14,10 @@ import androidx.lifecycle.Observer
 import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.ListaEncomendasAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityListaEncomendasBinding
+import com.example.gerenciadordeencomendas.databinding.ItemEncomendaBinding
 import com.example.gerenciadordeencomendas.repository.Repository
 import com.example.gerenciadordeencomendas.utils.NetworkChecker
+import com.example.gerenciadordeencomendas.utils.Utils
 
 class ListaEncomendasActivity : AppCompatActivity() {
 
@@ -27,12 +30,12 @@ class ListaEncomendasActivity : AppCompatActivity() {
         ActivityListaEncomendasBinding.inflate(layoutInflater)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         title = "Minha encomendas"
         clicouBotaoAdicionarPacote()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
