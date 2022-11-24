@@ -60,6 +60,10 @@ class DetalheEncomendaActivity : AppCompatActivity() {
                 codigoRastreio.text = it.codigoRastreio
                 val mensagemErro = binding.activityDetalheEncomendaMensagemErro
                 val iconeErro = binding.activityDetalheEncomendaIconErro
+                if (it.status == "Entregue") {
+                    binding.activityDetalheEncomendaCirculo.setBackgroundResource(R.drawable.view_circular_verde)
+                    binding.activityDetalheEncomendaIcon.setBackgroundResource(R.drawable.ic_packageentregue)
+                }
 
                 val user = "isaquecross15@gmail.com"
                 val token = "0a40c26417782427548f2aeb57f74c4038faf1f26ac662379425e35c848cce2b"
@@ -70,10 +74,7 @@ class DetalheEncomendaActivity : AppCompatActivity() {
                         val tamanhoEvento = rastreio.eventos.size - 1
                         val primeiroStatus = rastreio.eventos.get(tamanhoEvento)
                         val ultimoStatus = rastreio.eventos.get(0)
-                        if (ultimoStatus.status == "Objeto entregue ao destinatário") {
-                            binding.activityDetalheEncomendaCirculo.setBackgroundResource(R.drawable.view_circular_verde)
-                            binding.activityDetalheEncomendaIcon.setBackgroundResource(R.drawable.ic_packageentregue)
-                        }
+
                         diasDePostagem(ultimoStatus, primeiroStatus)
 
                         adpter.atualiza(rastreio.eventos, ultimoStatus, encomendaId, primeiroStatus)
