@@ -36,9 +36,6 @@ class DetalheEncomendaActivity : AppCompatActivity() {
         provedor.get(DetalheEncomendaViewModel::class.java)
 
     }
-    private val webCliente by lazy {
-        RastreioWebCliente()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,10 +69,7 @@ class DetalheEncomendaActivity : AppCompatActivity() {
                     binding.activityDetalheEncomendaIcon.setBackgroundResource(R.drawable.ic_packageentregue)
                 }
 
-                val user = "isaquecross15@gmail.com"
-                val token = "0a40c26417782427548f2aeb57f74c4038faf1f26ac662379425e35c848cce2b"
-                val codigo = it.codigoRastreio
-                val rastreio = webCliente.buscaRastreio(user, token, codigo)
+                val rastreio =  viewModel.buscaWebCliente(it.codigoRastreio)
                 if (rastreio.quantidade != 0L) {
                     if (rastreio.eventos.size != 0) {
                         val tamanhoEvento = rastreio.eventos.size - 1

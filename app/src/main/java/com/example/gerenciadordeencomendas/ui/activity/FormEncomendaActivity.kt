@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
+import androidx.lifecycle.ViewModelProvider
 import com.example.gerenciadordeencomendas.databinding.ActivityFormEncomendaBinding
 import com.example.gerenciadordeencomendas.model.Encomenda
 import com.example.gerenciadordeencomendas.repository.Repository
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.FormEncomendaViewModel
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.FormEncomendaViewModelFactory
 import com.example.gerenciadordeencomendas.utils.Utils
 import java.util.*
 
@@ -15,8 +18,11 @@ class FormEncomendaActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityFormEncomendaBinding.inflate(layoutInflater)
     }
-    private val repository by lazy {
-        Repository()
+    private val viewModel by lazy {
+       val repository =  Repository()
+        val factory = FormEncomendaViewModelFactory(repository)
+        val provider = ViewModelProvider(this, factory)
+        provider.get(FormEncomendaViewModel::class.java)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +34,7 @@ class FormEncomendaActivity : AppCompatActivity() {
 
     private fun clicouBotaoAdicionarEncomenda() {
         binding.activityFormEncomendaBotao.setOnClickListener {
-            val usuarioId = repository.auth.currentUser?.uid
+            val usuarioId = viewModel.auth.currentUser?.uid
             val codigoRastreio = binding.activityFormEncomendaCodigo.text.toString()
             val nomePacote = binding.activityFormEncomendaNomedopacote.text.toString()
             val dataAtualizado = Utils().dataHora()
@@ -38,7 +44,7 @@ class FormEncomendaActivity : AppCompatActivity() {
             if (!TextUtils.isEmpty(codigoRastreio) && !TextUtils.isEmpty(nomePacote)) {
                 val encomenda = Encomenda(firebaseId, usuarioId.toString(), codigoRastreio, nomePacote, status, dataCriado, dataAtualizado)
                 if (validaRastreio(codigoRastreio)) {
-                    repository.salvarEncomenda(encomenda).addOnCompleteListener {
+                    viewModel.salvarEncomenda(encomenda).addOnCompleteListener {
                         if (it.isSuccessful) {
                             finish()
                         } else {
