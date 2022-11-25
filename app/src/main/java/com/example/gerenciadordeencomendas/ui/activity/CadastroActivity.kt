@@ -6,9 +6,12 @@ import android.os.Handler
 import android.text.TextUtils
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.gerenciadordeencomendas.databinding.ActivityCadastroBinding
 import com.example.gerenciadordeencomendas.model.Usuario
 import com.example.gerenciadordeencomendas.repository.Repository
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.CadastroViewModel
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.CadastroViewModelFactory
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -20,9 +23,13 @@ class CadastroActivity : AppCompatActivity() {
         ActivityCadastroBinding.inflate(layoutInflater)
     }
 
-    private val repository by lazy {
-        Repository()
+    private val viewModel by lazy {
+        val repository = Repository()
+        val factory = CadastroViewModelFactory(repository)
+        val provedor = ViewModelProvider(this, factory)
+        provedor.get(CadastroViewModel::class.java)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,28 +44,28 @@ class CadastroActivity : AppCompatActivity() {
             if (!TextUtils.isEmpty(nome) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(senha)) {
                 mostraProgressBar()
                 val usuario = Usuario(nome, email, senha)
-                repository.cadastraUsuario(usuario).addOnSuccessListener {
+                viewModel.cadastraUsuario(usuario).addOnSuccessListener {
                     Intent(this, ListaEncomendasActivity::class.java).apply {
-                        repository.salvarNomeDoUsuario(usuario.nome).addOnCompleteListener {
-                            if (it.isSuccessful){
+                        viewModel.salvarNomeDoUsuario(usuario.nome).addOnCompleteListener {
+                            if (it.isSuccessful) {
                                 startActivity(this)
                                 finish()
                             }
                         }
                     }
-                }.addOnFailureListener {exception->
+                }.addOnFailureListener { exception ->
                     ocultaProgressBar()
-                    val mensagemErro = when(exception){
-                       is FirebaseAuthWeakPasswordException -> "*Digite uma senha com no mínimo 6 caracteres!"
+                    val mensagemErro = when (exception) {
+                        is FirebaseAuthWeakPasswordException -> "*Digite uma senha com no mínimo 6 caracteres!"
                         is FirebaseAuthInvalidCredentialsException -> "*Digite um email válido!"
                         is FirebaseAuthUserCollisionException -> "*Esta conta já foi cadastrada!"
                         is FirebaseNetworkException -> "*Sem conexão com a internet!"
                         else -> "*Erro ao cadastrar usuário!"
                     }
-                        binding.activityCadastroMensagemErro.text = mensagemErro
-                        Handler().postDelayed({
-                            binding.activityCadastroMensagemErro.text = ""
-                        },4000)
+                    binding.activityCadastroMensagemErro.text = mensagemErro
+                    Handler().postDelayed({
+                        binding.activityCadastroMensagemErro.text = ""
+                    }, 4000)
 
                 }
             }
@@ -85,16 +92,18 @@ class CadastroActivity : AppCompatActivity() {
     private fun vaiParaLogin() {
         binding.activityCadastroBotaoVaiparalogin.setOnClickListener {
             Intent(this, LoginActivity::class.java).apply {
+                startActivity(this)
                 finish()
             }
         }
     }
 
-    private fun mostraProgressBar(){
+    private fun mostraProgressBar() {
         binding.activityCadastroProgessbar.visibility = View.VISIBLE
         binding.activityCadastroBotaoCadastrar.visibility = View.GONE
     }
-    private fun ocultaProgressBar(){
+
+    private fun ocultaProgressBar() {
         binding.activityCadastroProgessbar.visibility = View.GONE
         binding.activityCadastroBotaoCadastrar.visibility = View.VISIBLE
     }

@@ -1,39 +1,40 @@
 package com.example.gerenciadordeencomendas.ui.activity
 
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.ListaEncomendasAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityListaEncomendasBinding
-import com.example.gerenciadordeencomendas.databinding.ItemEncomendaBinding
 import com.example.gerenciadordeencomendas.repository.Repository
-import com.example.gerenciadordeencomendas.utils.NetworkChecker
-import com.example.gerenciadordeencomendas.utils.Utils
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.ListaEncomendasViewModel
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.ListaEncomendasViewModelFactory
 
 class ListaEncomendasActivity : AppCompatActivity() {
 
     private val adapter = ListaEncomendasAdapter(this)
 
-    private val repository by lazy {
-        Repository()
-    }
     private val binding by lazy {
         ActivityListaEncomendasBinding.inflate(layoutInflater)
+    }
+
+    private val viewModel by lazy {
+        val repository = Repository()
+        val factory = ListaEncomendasViewModelFactory(repository)
+        val provedor = ViewModelProvider(this, factory)
+        provedor.get(ListaEncomendasViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        title = "Minha encomendas"
+        title = "Minhas encomendas"
         clicouBotaoAdicionarPacote()
 
     }
@@ -47,7 +48,7 @@ class ListaEncomendasActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Deseja realmente sair?")
             .setPositiveButton("Sim"){ _,_ ->
-                repository.auth.signOut()
+                viewModel.auth.signOut()
                 vaiParaLogin()
             }
             .setNegativeButton("Não"){_,_->}
@@ -61,8 +62,8 @@ class ListaEncomendasActivity : AppCompatActivity() {
     }
 
     private fun configuraRecyclerview() {
-            repository.buscaTodasEncomendas()
-            repository.liveDataEncomenda.observe(this, Observer { encomenda ->
+            viewModel.buscaTodasEncomendas()
+            viewModel.liveDataEncomenda.observe(this, Observer { encomenda ->
                 adapter.atualiza(encomenda)
                 val recyclerView = binding.activityListaEncomendaRecyclerview
                 recyclerView.adapter = adapter
@@ -79,7 +80,7 @@ class ListaEncomendasActivity : AppCompatActivity() {
                     AlertDialog.Builder(this)
                         .setTitle("Excluir encomenda?")
                         .setPositiveButton("Sim") { _, _ ->
-                            repository.excluirEncomenda(it.firebaseId).addOnCompleteListener {
+                            viewModel.excluirEncomenda(it.firebaseId).addOnCompleteListener {
                                 Toast.makeText(this, "Encomenda excluída", Toast.LENGTH_SHORT)
                                     .show()
 

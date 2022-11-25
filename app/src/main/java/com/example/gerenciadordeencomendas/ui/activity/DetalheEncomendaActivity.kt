@@ -6,11 +6,14 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.DetalheEncomendaAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityDetalheEncomendaBinding
 import com.example.gerenciadordeencomendas.repository.Repository
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.DetalheEncomendaViewModel
+import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.DetalheEncomendaViewModelFactory
 import com.example.gerenciadordeencomendas.utils.Utils
 import com.example.gerenciadordeencomendas.webcliente.model.Evento
 import com.example.gerenciadordeencomendas.webcliente.model.RastreioWebCliente
@@ -25,10 +28,14 @@ class DetalheEncomendaActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityDetalheEncomendaBinding.inflate(layoutInflater)
     }
-    private val repository by lazy {
-        Repository()
-    }
 
+    private val viewModel by lazy {
+        val repository = Repository()
+        val factory = DetalheEncomendaViewModelFactory(repository)
+        val provedor = ViewModelProvider(this, factory)
+        provedor.get(DetalheEncomendaViewModel::class.java)
+
+    }
     private val webCliente by lazy {
         RastreioWebCliente()
     }
@@ -51,8 +58,8 @@ class DetalheEncomendaActivity : AppCompatActivity() {
 
     private fun mostraEncomenda() {
         mostraProgressbar()
-        repository.buscaEncomendaPorId(encomendaId)
-        repository.liveDataEncomendaId.observe(this, Observer {
+        viewModel.buscaEncomendaPorId(encomendaId)
+        viewModel.liveDataEncomendaId.observe(this, Observer {
             lifecycleScope.launch {
                 val nomePacote = binding.activityDetalheEncomendaNomePacote
                 nomePacote.text = it.nomePacote
