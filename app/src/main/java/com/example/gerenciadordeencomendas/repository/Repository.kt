@@ -24,42 +24,43 @@ class Repository {
     }
 
     fun cadastraUsuario(usuario: Usuario): Task<AuthResult> {
-      val resultado =  auth.createUserWithEmailAndPassword(usuario.email, usuario.senha).addOnCompleteListener {
-        }
+        val resultado = auth.createUserWithEmailAndPassword(usuario.email, usuario.senha)
+            .addOnCompleteListener {
+            }
         return resultado
     }
 
-     fun salvarNomeDoUsuario(nome: String): Task<Void> {
+    fun salvarNomeDoUsuario(nome: String): Task<Void> {
         val user: MutableMap<String, Any> = HashMap()
         user["nome"] = nome
-         val usuarioId = auth.currentUser?.uid
-            val documentReference = db.collection("Usuarios").document(usuarioId.toString())
-          return  documentReference.set(user).addOnSuccessListener {
-                Log.d(
-                    "db",
-                    "Sucesso ao salvar os dados"
-                )
-            }.addOnFailureListener { e -> Log.d("db_error", "Erros so salvar os dados$e") }
+        val usuarioId = auth.currentUser?.uid
+        val documentReference = db.collection("Usuarios").document(usuarioId.toString())
+        return documentReference.set(user).addOnSuccessListener {
+            Log.d(
+                "db",
+                "Sucesso ao salvar os dados"
+            )
+        }.addOnFailureListener { e -> Log.d("db_error", "Erros so salvar os dados$e") }
 
     }
 
 
     fun salvarEncomenda(encomenda: Encomenda): Task<Void> {
-      val documentReference =  db.collection("Encomendas").document()
-       return documentReference.set(encomenda).addOnSuccessListener {
+        val documentReference = db.collection("Encomendas").document()
+        return documentReference.set(encomenda).addOnSuccessListener {
             Log.i("Salvar encomenda", "salvarEncomenda: Sucesso ao salvar encomenda")
         }
 
     }
 
-    fun buscaTodasEncomendas(){
+    fun buscaTodasEncomendas() {
         val usuarioId = auth.currentUser?.uid
         db.collection("Encomendas")
             .orderBy("dataCriado", Query.Direction.DESCENDING)
             .whereEqualTo("usuarioId", usuarioId)
             .get().addOnCompleteListener {
-                if (it.isSuccessful){
-                    val encomenda : List<Encomenda> = emptyList()
+                if (it.isSuccessful) {
+                    val encomenda: List<Encomenda> = emptyList()
                     val encomendas = encomenda.toMutableList()
                     for (document in it.getResult()) {
                         val usuarioId = document.getString("usuarioId").toString()
@@ -69,8 +70,17 @@ class Repository {
                         val dataCriado = document.getLong("dataCriado")!!
                         val dataAtualizado = document.getString("dataAtualizado").toString()
                         val firebaseId = document.id
-                         encomendas.add(Encomenda(firebaseId, usuarioId,codigoRastreio,nomePacote,status,dataCriado,dataAtualizado))
-
+                        encomendas.add(
+                            Encomenda(
+                                firebaseId,
+                                usuarioId,
+                                codigoRastreio,
+                                nomePacote,
+                                status,
+                                dataCriado,
+                                dataAtualizado
+                            )
+                        )
                         liveDataEncomenda.value = encomendas
                     }
                 }
@@ -79,20 +89,30 @@ class Repository {
 
     val liveDataEncomenda = MutableLiveData<List<Encomenda>>()
 
-    fun buscaEncomendaPorId(encomendaId: String){
+    fun buscaEncomendaPorId(encomendaId: String) {
         db.collection("Encomendas")
             .document(encomendaId)
             .addSnapshotListener { documento, error ->
-                if (documento != null){
-                   val usuarioId =  documento.getString("usuarioId").toString()
-                   val codigoRastreio =  documento.getString("codigoRastreio").toString()
-                   val nomePacote =  documento.getString("nomePacote").toString()
-                   val status =  documento.getString("status").toString()
-                   val dataCriado =  documento.getLong("dataCriado")!!
-                   val dataAtualizado =  documento.getString("dataAtualizado").toString()
-                   val firebaseId =  documento.id
-                   val  encomendas = Encomenda(firebaseId, usuarioId,codigoRastreio,nomePacote,status,dataCriado,dataAtualizado)
-                    liveDataEncomendaId.value = encomendas
+                if (documento != null) {
+                    documento.getLong("dataCriado")?.let { dataCriado ->
+                        val usuarioId = documento.getString("usuarioId").toString()
+                        val codigoRastreio = documento.getString("codigoRastreio").toString()
+                        val nomePacote = documento.getString("nomePacote").toString()
+                        val status = documento.getString("status").toString()
+                        val dataAtualizado = documento.getString("dataAtualizado").toString()
+                        val firebaseId = documento.id
+                        val encomendas = Encomenda(
+                            firebaseId,
+                            usuarioId,
+                            codigoRastreio,
+                            nomePacote,
+                            status,
+                            dataCriado,
+                            dataAtualizado
+                        )
+                        liveDataEncomendaId.value = encomendas
+                    }
+
 
                 }
             }
@@ -100,7 +120,7 @@ class Repository {
 
     val liveDataEncomendaId = MutableLiveData<Encomenda>()
 
-    fun atualizaStatus(encomendaId: String, status: String){
+    fun atualizaStatus(encomendaId: String, status: String) {
         val data = Utils().dataHora()
         db.collection("Encomendas").document(encomendaId)
             .update("dataAtualizado", "Atualizado em: $data", "status", status)
@@ -109,10 +129,9 @@ class Repository {
             }
     }
 
-    fun excluirEncomenda(firebaseId : String): Task<Void> {
-      return  db.collection("Encomendas").document(firebaseId)
+    fun excluirEncomenda(firebaseId: String): Task<Void> {
+        return db.collection("Encomendas").document(firebaseId)
             .delete().addOnCompleteListener {
-
             }
     }
 
@@ -120,7 +139,7 @@ class Repository {
     suspend fun buscaWebCliente(codigo: String): ApiCorreios {
         val user = "isaquecross15@gmail.com"
         val token = "0a40c26417782427548f2aeb57f74c4038faf1f26ac662379425e35c848cce2b"
-        return  webCliente.buscaRastreio(user, token, codigo)
+        return webCliente.buscaRastreio(user, token, codigo)
     }
 
 }

@@ -2,8 +2,10 @@ package com.example.gerenciadordeencomendas.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.AdapterView.AdapterContextMenuInfo
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gerenciadordeencomendas.R
 import com.example.gerenciadordeencomendas.adapters.ListaEncomendasAdapter
 import com.example.gerenciadordeencomendas.databinding.ActivityListaEncomendasBinding
+import com.example.gerenciadordeencomendas.model.Encomenda
 import com.example.gerenciadordeencomendas.repository.Repository
 import com.example.gerenciadordeencomendas.ui.activity.viewmodel.ListaEncomendasViewModel
 import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.ListaEncomendasViewModelFactory
@@ -36,7 +39,7 @@ class ListaEncomendasActivity : AppCompatActivity() {
         setContentView(binding.root)
         title = "Minhas encomendas"
         clicouBotaoAdicionarPacote()
-
+        excluirEncomenda()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,50 +50,60 @@ class ListaEncomendasActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         AlertDialog.Builder(this)
             .setTitle("Deseja realmente sair?")
-            .setPositiveButton("Sim"){ _,_ ->
+            .setPositiveButton("Sim") { _, _ ->
                 viewModel.auth.signOut()
                 vaiParaLogin()
             }
-            .setNegativeButton("Não"){_,_->}
+            .setNegativeButton("Não") { _, _ -> }
             .show()
         return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
         super.onResume()
-            configuraRecyclerview()
+        configuraRecyclerview()
     }
 
     private fun configuraRecyclerview() {
-            viewModel.buscaTodasEncomendas()
-            viewModel.liveDataEncomenda.observe(this, Observer { encomenda ->
-                adapter.atualiza(encomenda)
-                val recyclerView = binding.activityListaEncomendaRecyclerview
-                recyclerView.adapter = adapter
-                adapter.quandoClicarNoItem = {
-                    val intent = Intent(
-                        this, DetalheEncomendaActivity::class.java
-                    ).apply {
-                        putExtra(CHAVE_ENCOMENDA_ID, it.firebaseId)
-                    }
-                    startActivity(intent)
+        viewModel.buscaTodasEncomendas()
+
+        viewModel.liveDataEncomenda.observe(this, Observer { encomendas ->
+            Log.i("teste", "atualiza encomendas")
+            adapter.atualiza(encomendas)
+            val recyclerView = binding.activityListaEncomendaRecyclerview
+            recyclerView.adapter = adapter
+            adapter.quandoClicarNoItem = {
+                val intent = Intent(
+                    this, DetalheEncomendaActivity::class.java
+                ).apply {
+                    putExtra(CHAVE_ENCOMENDA_ID, it.firebaseId)
                 }
+                startActivity(intent)
+            }
+        })
+    }
 
-                adapter.quandoSegurarNoItem = {
-                    AlertDialog.Builder(this)
-                        .setTitle("Excluir encomenda?")
-                        .setPositiveButton("Sim") { _, _ ->
-                            viewModel.excluirEncomenda(it.firebaseId).addOnCompleteListener {
-                                Toast.makeText(this, "Encomenda excluída", Toast.LENGTH_SHORT)
-                                    .show()
-
+    private fun excluirEncomenda() {
+        adapter.quandoSegurarNoItem = { encomenda ->
+                AlertDialog.Builder(this)
+                    .setTitle("Tem certeza que deseja excluir a encomenda?")
+                    .setPositiveButton("Sim") { _, _ ->
+                        viewModel.excluirEncomenda(encomenda.firebaseId)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    adapter.remove(encomenda)
+                                    Toast.makeText(
+                                        this,
+                                        "Encomenda excluída",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
                             }
-                        }
-                        .setNegativeButton("Não") { _, _ -> }
-                        .show()
-                }
-
-            })
+                    }
+                    .setNegativeButton("Não") { _, _ -> }
+                    .show()
+        }
     }
 
     private fun clicouBotaoAdicionarPacote() {
@@ -104,11 +117,12 @@ class ListaEncomendasActivity : AppCompatActivity() {
             startActivity(this)
         }
     }
+
     private fun vaiParaLogin() {
-       Intent(this, LoginActivity::class.java).apply {
-           startActivity(this)
-           finish()
-       }
+        Intent(this, LoginActivity::class.java).apply {
+            startActivity(this)
+            finish()
+        }
     }
 
 }
