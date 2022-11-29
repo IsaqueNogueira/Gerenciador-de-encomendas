@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.example.gerenciadordeencomendas.databinding.ActivityFormEncomendaBinding
 import com.example.gerenciadordeencomendas.model.Encomenda
@@ -42,12 +43,15 @@ class FormEncomendaActivity : AppCompatActivity() {
             val status = "Toque para atualizar"
             val firebaseId = ""
             if (!TextUtils.isEmpty(codigoRastreio) && !TextUtils.isEmpty(nomePacote)) {
+                mostraProgressBar()
                 val encomenda = Encomenda(firebaseId, usuarioId.toString(), codigoRastreio, nomePacote, status, dataCriado, dataAtualizado)
                 if (validaRastreio(codigoRastreio)) {
                     viewModel.salvarEncomenda(encomenda).addOnCompleteListener {
                         if (it.isSuccessful) {
+                            ocularProgessBar()
                             finish()
                         } else {
+                            ocularProgessBar()
                             binding.activityFormEncomendaMensagemErro.text =
                                 "*Erro ao adicionar encomenda!"
                             Handler().postDelayed({
@@ -56,6 +60,7 @@ class FormEncomendaActivity : AppCompatActivity() {
                         }
                     }
                 } else {
+                    ocularProgessBar()
                     binding.activityFormEncomendaCodigo.setError("Código inválido")
                     binding.activityFormEncomendaCodigo.requestFocus()
                 }
@@ -83,5 +88,14 @@ class FormEncomendaActivity : AppCompatActivity() {
     private fun validaRastreio(input: String): Boolean {
         val regex = Regex(pattern = "^[A-Z]{2}[0-9]{9}[A-Z]{2}\$", options = setOf(RegexOption.IGNORE_CASE))
         return regex.matches(input)
+    }
+    private fun mostraProgressBar(){
+        binding.activityFormEncomendaProgressbar.visibility = View.VISIBLE
+        binding.activityFormEncomendaBotao.visibility = View.GONE
+    }
+
+    private fun ocularProgessBar(){
+        binding.activityFormEncomendaProgressbar.visibility = View.GONE
+        binding.activityFormEncomendaBotao.visibility = View.VISIBLE
     }
 }

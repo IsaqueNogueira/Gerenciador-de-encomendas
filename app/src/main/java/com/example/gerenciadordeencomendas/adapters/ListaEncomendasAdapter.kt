@@ -2,9 +2,7 @@ package com.example.gerenciadordeencomendas.adapters
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gerenciadordeencomendas.R
@@ -15,7 +13,7 @@ class ListaEncomendasAdapter(
     private val context: Context,
     encomenda: List<Encomenda> = emptyList(),
     var quandoClicarNoItem: (encomenda: Encomenda) -> Unit = {},
-    var quandoSegurarNoItem: (encomenda: Encomenda) -> Unit = {},
+    var quandoSegurarNoItem: (encomenda: Encomenda) -> Unit = {}
 ) : RecyclerView.Adapter<ListaEncomendasAdapter.ViewHolder>() {
 
 
@@ -35,8 +33,10 @@ class ListaEncomendasAdapter(
            itemView.setOnLongClickListener{
                if (::encomenda.isInitialized){
                    quandoSegurarNoItem(encomenda)
+                   binding.itemEncomendaCardview.setBackgroundColor(Color.parseColor("#b2b2b2"))
                }
                true
+
            }
 
        }
@@ -70,9 +70,7 @@ class ListaEncomendasAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val encomenda = encomenda[position]
-
         holder.vincula(encomenda)
-
     }
 
     override fun getItemCount(): Int = encomenda.size
@@ -82,6 +80,12 @@ class ListaEncomendasAdapter(
         this.encomenda.addAll(encomenda)
         notifyDataSetChanged()
     }
+
+    fun remove(encomenda: Encomenda) {
+        this.encomenda.remove(encomenda)
+        notifyDataSetChanged()
+    }
+
 }
 
 

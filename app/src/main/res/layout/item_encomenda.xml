@@ -5,11 +5,11 @@
     android:id="@+id/item_encomenda_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
+    android:focusable="true"
+    android:clickable="true"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
+    tools:ignore="UnusedAttribute"
     app:cardElevation="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
