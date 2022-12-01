@@ -45,7 +45,7 @@ class CadastroActivity : AppCompatActivity() {
                 mostraProgressBar()
                 val usuario = Usuario(nome, email, senha)
                 viewModel.cadastraUsuario(usuario).addOnSuccessListener {
-                    Intent(this, ListaEncomendasActivity::class.java).apply {
+                    Intent(this, EncomendasActivity::class.java).apply {
                         viewModel.salvarNomeDoUsuario(usuario.nome).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 startActivity(this)
