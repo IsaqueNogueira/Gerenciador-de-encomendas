@@ -1,128 +1,45 @@
 package com.example.gerenciadordeencomendas.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.FragmentOnAttachListener
 import com.example.gerenciadordeencomendas.R
-import com.example.gerenciadordeencomendas.adapters.DetalheEncomendaAdapter
-import com.example.gerenciadordeencomendas.databinding.ActivityDetalheEncomendaBinding
-import com.example.gerenciadordeencomendas.repository.Repository
-import com.example.gerenciadordeencomendas.ui.activity.viewmodel.DetalheEncomendaViewModel
-import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.DetalheEncomendaViewModelFactory
-import com.example.gerenciadordeencomendas.utils.Utils
-import com.example.gerenciadordeencomendas.webcliente.model.Evento
-import com.example.gerenciadordeencomendas.webcliente.model.RastreioWebCliente
-import kotlinx.coroutines.launch
+import com.example.gerenciadordeencomendas.ui.activity.extensions.transacaoFragment
+import com.example.gerenciadordeencomendas.ui.activity.fragment.DetalheEncomendaFragment
+import com.example.gerenciadordeencomendas.ui.activity.fragment.ListaEncomendasFragment
 
 class DetalheEncomendaActivity : AppCompatActivity() {
 
     private var encomendaId = ""
 
-    private val adpter = DetalheEncomendaAdapter(this)
-
-    private val binding by lazy {
-        ActivityDetalheEncomendaBinding.inflate(layoutInflater)
-    }
-
-    private val viewModel by lazy {
-        val repository = Repository()
-        val factory = DetalheEncomendaViewModelFactory(repository)
-        val provedor = ViewModelProvider(this, factory)
-        provedor.get(DetalheEncomendaViewModel::class.java)
-
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_detalhe_encomenda)
         supportActionBar?.hide()
         tentaCarregarEncomenda()
-        mostraEncomenda()
-        clicouBotaoVoltar()
-
+        abreDetalheEncomenda()
     }
 
-    private fun clicouBotaoVoltar() {
-        binding.activityDetalheEncomendaVoltar.setOnClickListener {
-            finish()
-        }
-    }
+    init {
+        val fm = supportFragmentManager
 
-    private fun mostraEncomenda() {
-        mostraProgressbar()
-        viewModel.buscaEncomendaPorId(encomendaId)
-        viewModel.liveDataEncomendaId.observe(this, Observer {
-            lifecycleScope.launch {
-                val nomePacote = binding.activityDetalheEncomendaNomePacote
-                nomePacote.text = it.nomePacote
-                val codigoRastreio = binding.activityDetalheEncomendaCodigoRastreio
-                codigoRastreio.text = it.codigoRastreio
-                val mensagemErro = binding.activityDetalheEncomendaMensagemErro
-                val iconeErro = binding.activityDetalheEncomendaIconErro
-                if (it.status == "Entregue") {
-                    binding.activityDetalheEncomendaCirculo.setBackgroundResource(R.drawable.view_circular_verde)
-                    binding.activityDetalheEncomendaIcon.setBackgroundResource(R.drawable.ic_packageentregue)
-                }
+        val listener = FragmentOnAttachListener { fragmentManager, fragment ->
+            if (fragment is DetalheEncomendaFragment){
+                fragment.botaoVoltar = this::finish
 
-                val rastreio =  viewModel.buscaWebCliente(it.codigoRastreio)
-                if (rastreio.quantidade != 0L) {
-                    if (rastreio.eventos.size != 0) {
-                        val tamanhoEvento = rastreio.eventos.size - 1
-                        val primeiroStatus = rastreio.eventos.get(tamanhoEvento)
-                        val ultimoStatus = rastreio.eventos.get(0)
-
-                        diasDePostagem(ultimoStatus, primeiroStatus)
-
-                        adpter.atualiza(rastreio.eventos, ultimoStatus, encomendaId, primeiroStatus)
-                        val recyclerView = binding.activityDetalheEncomendaRecyclerview
-                        recyclerView.adapter = adpter
-                        ocultaProgressbar()
-                    }
-                } else {
-                    ocultaProgressbar()
-                    mensagemErro.visibility = View.VISIBLE
-                    iconeErro.visibility = View.VISIBLE
-                    codigoRastreio.setTextColor(Color.RED)
-                }
             }
-        })
-
+        }
+        fm.addFragmentOnAttachListener(listener)
     }
 
-    private fun diasDePostagem(ultimoStatus: Evento, primeiroStatus: Evento) {
-        val dataPostagem = primeiroStatus.data
-        var dataHoje = Utils().data()
-        if (ultimoStatus.status == "Objeto entregue ao destinatário"){
-            dataHoje = ultimoStatus.data
+    private fun abreDetalheEncomenda(){
+        val fragment = DetalheEncomendaFragment()
+        val dados = Bundle()
+        dados.putString(CHAVE_ENCOMENDA_ID, encomendaId)
+        fragment.arguments = dados
+        transacaoFragment {
+            replace(R.id.activity_detalhe_encomenda_container, fragment)
         }
-        val diasEnviado = Utils().dias(dataPostagem, dataHoje)
-        var dia: String
-        var textoEnviado: String
-        if (diasEnviado < 2) {
-            dia = "dia"
-        } else {
-            dia = "dias"
-        }
-
-        if (ultimoStatus.status == "Objeto entregue ao destinatário") {
-            textoEnviado = "Entregue em:"
-        } else {
-            textoEnviado = "Enviado há:"
-        }
-        binding.activityDetalheEncomendaDiasenviado.text = "$textoEnviado $diasEnviado $dia"
-    }
-
-    private fun ocultaProgressbar() {
-        binding.activityDetalheEncomendaProgressbar.visibility = View.GONE
-    }
-
-    private fun mostraProgressbar() {
-        binding.activityDetalheEncomendaProgressbar.visibility = View.VISIBLE
     }
 
     private fun tentaCarregarEncomenda() {
@@ -132,4 +49,5 @@ class DetalheEncomendaActivity : AppCompatActivity() {
         }
 
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.gerenciadordeencomendas.ui.activity.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -70,17 +71,21 @@ class ListaEncomendasFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         context?.let {
-            AlertDialog.Builder(it)
-                .setTitle("Deseja realmente sair?")
-                .setPositiveButton("Sim") { _, _ ->
-                    viewModel.auth.signOut()
-                    quandoClicarSair()
-                }
-                .setNegativeButton("Não") { _, _ -> }
-                .show()
+            configuraAlertDialogSair(it)
             return super.onOptionsItemSelected(item)
         } ?: throw IllegalArgumentException("Contexto inválido")
 
+    }
+
+    private fun configuraAlertDialogSair(it: Context) {
+        AlertDialog.Builder(it)
+            .setTitle("Deseja realmente sair?")
+            .setPositiveButton("Sim") { _, _ ->
+                viewModel.auth.signOut()
+                quandoClicarSair()
+            }
+            .setNegativeButton("Não") { _, _ -> }
+            .show()
     }
 
     private fun configuraRecyclerview() {
@@ -98,27 +103,34 @@ class ListaEncomendasFragment : Fragment() {
     private fun excluirEncomenda() {
         adapter.quandoSegurarNoItem = { encomenda ->
             context?.let {context->
-                AlertDialog.Builder(context)
-                    .setTitle("Tem certeza que deseja excluir a encomenda?")
-                    .setPositiveButton("Sim") { _, _ ->
-                        viewModel.excluirEncomenda(encomenda.firebaseId)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    adapter.remove(encomenda)
-                                    Toast.makeText(
-                                        context,
-                                        "Encomenda excluída",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                }
-                            }
-                    }
-                    .setNegativeButton("Não") { _, _ -> }
-                    .show()
+                configuraAlertDialogExcluirEncomenda(context, encomenda)
             }
         }
 
+    }
+
+    private fun configuraAlertDialogExcluirEncomenda(
+        context: Context,
+        encomenda: Encomenda
+    ) {
+        AlertDialog.Builder(context)
+            .setTitle("Tem certeza que deseja excluir a encomenda?")
+            .setPositiveButton("Sim") { _, _ ->
+                viewModel.excluirEncomenda(encomenda.firebaseId)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            adapter.remove(encomenda)
+                            Toast.makeText(
+                                context,
+                                "Encomenda excluída",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+            }
+            .setNegativeButton("Não") { _, _ -> }
+            .show()
     }
 
     private fun clicouBotaoAdicionarPacote() {
