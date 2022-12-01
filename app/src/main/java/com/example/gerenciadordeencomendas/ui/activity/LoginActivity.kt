@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun vaiParaListaEncomendas() {
-        Intent(this, ListaEncomendasActivity::class.java).apply {
+        Intent(this, EncomendasActivity::class.java).apply {
             startActivity(this)
             finish()
         }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,7 @@ import com.example.gerenciadordeencomendas.ui.activity.viewmodel.factory.Detalhe
 import com.example.gerenciadordeencomendas.utils.Utils
 import com.example.gerenciadordeencomendas.webcliente.model.Evento
 import kotlinx.coroutines.launch
+
 
 class DetalheEncomendaFragment : Fragment() {
     var botaoVoltar: () -> Unit = {}
@@ -53,9 +55,9 @@ class DetalheEncomendaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mostraEncomenda()
-        clicouBotaoVoltar()
+        activity?.title = "Encomenda"
+//        clicouBotaoVoltar()
     }
-
 
     private fun mostraEncomenda() {
         mostraProgressbar()
@@ -68,11 +70,6 @@ class DetalheEncomendaFragment : Fragment() {
                 codigoRastreio.text = it.codigoRastreio
                 val mensagemErro = binding.detalheEncomendaMensagemErro
                 val iconeErro = binding.detalheEncomendaIconErro
-                if (it.status == "Entregue") {
-                    binding.detalheEncomendaCirculo.setBackgroundResource(R.drawable.view_circular_verde)
-                    binding.detalheEncomendaIcon.setBackgroundResource(R.drawable.ic_packageentregue)
-                }
-
                 val rastreio = viewModel.buscaWebCliente(it.codigoRastreio)
                 if (rastreio.quantidade != 0L) {
                     if (rastreio.eventos.size != 0) {
@@ -130,10 +127,10 @@ class DetalheEncomendaFragment : Fragment() {
     }
 
 
-    private fun clicouBotaoVoltar() {
-        binding.detalheEncomendaVoltar.setOnClickListener {
-            botaoVoltar()
-        }
-    }
+//    private fun clicouBotaoVoltar() {
+//        binding.detalheEncomendaVoltar.setOnClickListener {
+//            botaoVoltar()
+//        }
+//    }
 
 }
